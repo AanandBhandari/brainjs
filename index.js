@@ -6,5 +6,8 @@ const trainingData = [
     { input: [1, 1], output: [0] }
 ]
 
-net.train(trainingData);
+net.train(trainingData,{
+    log : err => console.log(err),
+    logPeroid : 100
+});
 console.log(net.run([1, 1]))
