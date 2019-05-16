@@ -1,47 +1,12 @@
-const restaurants = {
-    "global": "Sunday",
-    "Brilliant Yellow Corral": "Monday",
-    "Penny’s": "Tuesday",
-    "bells cafe": "Thursday",
-    "Right Coast Wings": "Wednesday",
-    "The Delusion Last Railway Car": "Thursday",
-    "Fun Day Inn": "Friday",
-    "JHOP": "Saturday",
-    "Owls": "Sunday",
-    "kfc": "Thursday"
-};
+const trainingData = [
+    [1,2,3,4,5],
+    [5,4,3,2,1]
+]
+// recurrent neural netwror
+// it is based on the depth of the frame like in videos!
+const net = new brain.recurrent.LSTMTimeStep();
 
-// input: { Monday, Tuesday, Wednesday, etc. }
-// output: { Restaurant1, Restaurant2 }
+net.train(trainingData);
 
-const trainingData = [];
-
-for (restaurantName in restaurants) {
-    const dayOfWeek = restaurants[restaurantName]
-    trainingData.push({
-        input : {[dayOfWeek]:1},
-        output :{[restaurantName]: 1}
-    });
-}
-// console.log(trainingData);
-const net = new brain.NeuralNetwork({ hiddenLayers: [3] });
-
-const stats = net.train(trainingData);
-// console.log(stats);
-// console.log(net.run({ 'Monday': 1 }));
-
-// function returning the restaurantForDay name
-function restaurantForDay(dayOfWeek){
-    const result = net.run({[dayOfWeek]: 1 });
-    console.log(result);
-    let highestValue = 0;
-    let highestResturentName = '';
-    for(let restaurantName in result) {
-        if (result[restaurantName]>highestValue) {
-            highestValue = result[restaurantName]
-            highestResturentName = restaurantName
-        }
-    }
-    return highestResturentName
-}
-console.log(restaurantForDay('Sunday'));
+console.log(net.run([1, 2, 3, 4]));
+console.log(net.run([5, 4, 3, 2]));
