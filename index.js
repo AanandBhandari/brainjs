@@ -1,59 +1,138 @@
+// rawData = ' # ';
+
+function toArray(string) { // normalize 
+    if (string.length !== 7 * 7) throw new Error('string in wrong size');
+    return string.split('').map(toNumber);
+}
+function toNumber(character) {
+    return character === '#' ? 1 : 0;
+}
+
+const zero = toArray(
+    '#######' +
+    '#     #' +
+    '#     #' +
+    '#     #' +
+    '#     #' +
+    '#     #' +
+    '#######'
+);
+const one = toArray(
+    '   #   ' +
+    '   #   ' +
+    '   #   ' +
+    '   #   ' +
+    '   #   ' +
+    '   #   ' +
+    '   #   '
+);
+const two = toArray(
+    '#######' +
+    '#     #' +
+    '      #' +
+    '     # ' +
+    '   #   ' +
+    ' #     ' +
+    '#######'
+);
+const three = toArray(
+    '#######' +
+    '      #' +
+    '      #' +
+    ' ######' +
+    '      #' +
+    '      #' +
+    '#######'
+);
+const four = toArray(
+    '#     #' +
+    '#     #' +
+    '#     #' +
+    '#######' +
+    '      #' +
+    '      #' +
+    '      #'
+);
+const five = toArray(
+    '#######' +
+    '#      ' +
+    '#      ' +
+    '#######' +
+    '      #' +
+    '      #' +
+    '#######'
+);
+const six = toArray(
+    '      #' +
+    '    #  ' +
+    '  #    ' +
+    ' ######' +
+    '#     #' +
+    '#     #' +
+    '#######'
+);
+const seven = toArray(
+    '#######' +
+    '     # ' +
+    '    #  ' +
+    '   #   ' +
+    '  #    ' +
+    ' #     ' +
+    '#      '
+);
+const eight = toArray(
+    '#######' +
+    '#     #' +
+    '#     #' +
+    '#######' +
+    '#     #' +
+    '#     #' +
+    '#######'
+);
+const nine = toArray(
+    '#######' +
+    '#     #' +
+    '#     #' +
+    '###### ' +
+    '    #  ' +
+    '   #   ' +
+    ' #     '
+);
+
+const net = new brain.NeuralNetwork();
 const trainingData = [
-    '0+0=0',
-    '0+1=1',
-    '0+2=2',
-    '0+3=3',
-    '0+4=4',
-    '0+5=5',
-
-    '1+0=1',
-    '1+1=2',
-    '1+2=3',
-    '1+3=4',
-    '1+4=5',
-    '1+5=6',
-
-    '2+0=2',
-    '2+1=3',
-    '2+2=4',
-    '2+3=5',
-    '2+4=6',
-    '2+5=7',
-
-    '3+0=3',
-    '3+1=4',
-    '3+2=5',
-    '3+3=6',
-    '3+4=7',
-    '3+5=8',
-
-    '4+0=4',
-    '4+1=5',
-    '4+2=6',
-    '4+3=7',
-    '4+4=8',
-    '4+5=9',
-
-    '5+0=5',
-    '5+1=6',
-    '5+2=7',
-    '5+3=8',
-    '5+4=9',
-    '5+5=10',
+    { input: zero, output: { zero: 1 } },
+    { input: one, output: { one: 1 } },
+    { input: two, output: { two: 1 } },
+    { input: three, output: { three: 1 } },
+    { input: four, output: { four: 1 } },
+    { input: five, output: { five: 1 } },
+    { input: six, output: { six: 1 } },
+    { input: seven, output: { seven: 1 } },
+    { input: eight, output: { eight: 1 } },
+    { input: nine, output: { nine: 1 } }
 ];
 
-// const inputMap = ['0', '+', '=', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-// inputMap.length === inputSize
-// [1,0,0,0,0,0,0,0,0,0,0,0];
-// [0,1,0,0,0,0,0,0,0,0,0,0];
-// [1,0,0,0,0,0,0,0,0,0,0,0];
-// [0,0,1,0,0,0,0,0,0,0,0,0];
-// [1,0,0,0,0,0,0,0,0,0,0,0];
+net.train(trainingData);
 
-const net = new brain.recurrent.LSTM({ hiddenLayers: [20] });
+// const result = net.run(toArray(
+//     '#######' +
+//     '#     #' +
+//     '#     #' +
+//     '#######' +
+//     '#     #' +
+//     '#     #' +
+//     '#######' 
+// ));
 
-net.train(trainingData, { errorThresh: 0.025 });
+const result = brain.likely(toArray(
+    '#######' +
+    '#     #' +
+    '#     #' +
+    '##  ###' +
+    '#     #' +
+    '#     #' +
+    '#######'
+), net);
 
-console.log(net.run('0+1='));
-console.log(net.run('4+1='));
-console.log(net.run('2+1='));
+console.log(result);
