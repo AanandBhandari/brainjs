@@ -1,15 +1,26 @@
 const trainingData = [
-    { input: 'I am super happy!', output: 'happy' },
-    { input: 'What a pill!', output: 'sarcastic' },
-    { input: 'I am super unhappy!', output: 'sad' },
-    { input: 'Are we there yet?', output: 'excited' }
+    { input: [0, 0], output: [0] },
+    { input: [0, 1], output: [1] },
+    // { input: [1, 0], output: [1] },
+    // { input: [1, 1], output: [0] }
 ];
 
-const net = new brain.recurrent.LSTM();
-net.train(trainingData, {
-    iterations: 100,
-    erroThresh: 0.011
-});
+const net = new brain.NeuralNetwork({ hiddenLayers: [3] });
 
-console.log(net.run('I am unhappy!'));
-console.log(net.run('I am happy!'));
+net.train(trainingData);
+
+console.log('before reinforcement');
+console.log(Array.from(net.run([0, 0])));
+console.log(Array.from(net.run([1, 0])));
+
+trainingData.push(
+    { input: [1, 0], output: [1] }
+);
+
+net.train(trainingData);
+
+console.log('after reinforcement');
+console.log(Array.from(net.run([0, 0])));
+console.log(Array.from(net.run([1, 0])));
+
+// bonus add mis
