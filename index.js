@@ -9,7 +9,6 @@ function scaleDown(step) { // normalize
     };
 }
 
-console.log(scaleDown(rawData[0]));
 
 function scaleUp(step) { // denormalize
     return {
@@ -19,5 +18,25 @@ function scaleUp(step) { // denormalize
         close: step.close * 138
     };
 }
+const scaledData = rawData.map(scaleDown);
+const trainingData = [
+    scaledData.slice(0, 5),
+    scaledData.slice(5, 10),
+    scaledData.slice(10, 15),
+    scaledData.slice(15, 20),
+];
 
-console.log(scaleUp(scaleDown(rawData[0])));
+// console.log(trainingData);
+const net = new brain.recurrent.LSTMTimeStep({
+    inputSize: 4,
+    hiddenLayers: [8, 8],
+    outputSize: 4
+});
+
+net.train(trainingData, {
+    learningRate: 0.005,
+    errorThresh: 0.02,
+    // log: (stats) => console.log(stats)
+});
+
+console.log(scaleUp(net.run(trainingData[0])));
