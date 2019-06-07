@@ -39,4 +39,8 @@ net.train(trainingData, {
     // log: (stats) => console.log(stats)
 });
 
-console.log(scaleUp(net.run(trainingData[0])));
+// console.log(scaleUp(net.run(trainingData[0])));
+console.log(net.forecast([
+    trainingData[0][0],
+    trainingData[0][1],
+], 3).map(scaleUp));
