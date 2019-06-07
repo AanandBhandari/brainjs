@@ -1,138 +1,15 @@
-// rawData = ' # ';
-
-function toArray(string) { // normalize 
-    if (string.length !== 7 * 7) throw new Error('string in wrong size');
-    return string.split('').map(toNumber);
-}
-function toNumber(character) {
-    return character === '#' ? 1 : 0;
-}
-
-const zero = toArray(
-    '#######' +
-    '#     #' +
-    '#     #' +
-    '#     #' +
-    '#     #' +
-    '#     #' +
-    '#######'
-);
-const one = toArray(
-    '   #   ' +
-    '   #   ' +
-    '   #   ' +
-    '   #   ' +
-    '   #   ' +
-    '   #   ' +
-    '   #   '
-);
-const two = toArray(
-    '#######' +
-    '#     #' +
-    '      #' +
-    '     # ' +
-    '   #   ' +
-    ' #     ' +
-    '#######'
-);
-const three = toArray(
-    '#######' +
-    '      #' +
-    '      #' +
-    ' ######' +
-    '      #' +
-    '      #' +
-    '#######'
-);
-const four = toArray(
-    '#     #' +
-    '#     #' +
-    '#     #' +
-    '#######' +
-    '      #' +
-    '      #' +
-    '      #'
-);
-const five = toArray(
-    '#######' +
-    '#      ' +
-    '#      ' +
-    '#######' +
-    '      #' +
-    '      #' +
-    '#######'
-);
-const six = toArray(
-    '      #' +
-    '    #  ' +
-    '  #    ' +
-    ' ######' +
-    '#     #' +
-    '#     #' +
-    '#######'
-);
-const seven = toArray(
-    '#######' +
-    '     # ' +
-    '    #  ' +
-    '   #   ' +
-    '  #    ' +
-    ' #     ' +
-    '#      '
-);
-const eight = toArray(
-    '#######' +
-    '#     #' +
-    '#     #' +
-    '#######' +
-    '#     #' +
-    '#     #' +
-    '#######'
-);
-const nine = toArray(
-    '#######' +
-    '#     #' +
-    '#     #' +
-    '###### ' +
-    '    #  ' +
-    '   #   ' +
-    ' #     '
-);
-
-const net = new brain.NeuralNetwork();
 const trainingData = [
-    { input: zero, output: { zero: 1 } },
-    { input: one, output: { one: 1 } },
-    { input: two, output: { two: 1 } },
-    { input: three, output: { three: 1 } },
-    { input: four, output: { four: 1 } },
-    { input: five, output: { five: 1 } },
-    { input: six, output: { six: 1 } },
-    { input: seven, output: { seven: 1 } },
-    { input: eight, output: { eight: 1 } },
-    { input: nine, output: { nine: 1 } }
+    'Jane saw Doug.',
+    'Doug saw Jane.',
+    'Spot saw Doug and Jane looking at each other.',
+    'It was love at first sight, and Spot had a frontrow seat. It was a very special moment for all.'
 ];
 
-net.train(trainingData);
+const net = new brain.recurrent.LSTM();
+net.train(trainingData, {
+    iterations: 1500,
+    errorThresh: 0.011
+});
 
-// const result = net.run(toArray(
-//     '#######' +
-//     '#     #' +
-//     '#     #' +
-//     '#######' +
-//     '#     #' +
-//     '#     #' +
-//     '#######' 
-// ));
-
-const result = brain.likely(toArray(
-    '#######' +
-    '#     #' +
-    '#     #' +
-    '##  ###' +
-    '#     #' +
-    '#     #' +
-    '#######'
-), net);
-
-console.log(result);
+console.log(net.run('Jane'));
+console.log(net.run('It was'));
