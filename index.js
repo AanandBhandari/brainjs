@@ -1,26 +1,27 @@
+// color preference
 const trainingData = [
-    { input: [0, 0], output: [0] },
-    { input: [0, 1], output: [1] },
-    // { input: [1, 0], output: [1] },
-    // { input: [1, 1], output: [0] }
+    { input: { blue: 1 }, output: [1] },
+    { input: { red: 1 }, output: [1] },
+    { input: { black: 1 }, output: [0] },
+    { input: { green: 1 }, output: [0] },
+    { input: { brown: 1 }, output: [0] },
 ];
 
-const net = new brain.NeuralNetwork({ hiddenLayers: [3] });
+const net = new brain.NeuralNetwork();
 
 net.train(trainingData);
+console.log('before preference change');
+console.log(Array.from(net.run({ blue: 1 })));
+console.log(Array.from(net.run({ brown: 1 })));
 
-console.log('before reinforcement');
-console.log(Array.from(net.run([0, 0])));
-console.log(Array.from(net.run([1, 0])));
-
+trainingData.pop();
 trainingData.push(
-    { input: [1, 0], output: [1] }
+    { input: { brown: 1 }, output: [1] }
 );
 
 net.train(trainingData);
+console.log('after preference change');
+console.log(Array.from(net.run({ blue: 1 })));
+console.log(Array.from(net.run({ brown: 1 })));
 
-console.log('after reinforcement');
-console.log(Array.from(net.run([0, 0])));
-console.log(Array.from(net.run([1, 0])));
-
-// bonus add mis
+// bonus 
